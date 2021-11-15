@@ -1,0 +1,7 @@
+{
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.enable": true,
+  "prettier.tabWidth": 2,
+  "typescript.tsdk": "./node_modules/typescript/lib"
+}
