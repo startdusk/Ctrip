@@ -19,7 +19,7 @@ namespace Ctrip.API.Models
         //public Guid? OrderId { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal OriginalPrice { get; set; }
-        [Range(0.0, 1.0)]
+        [Range(0.0, 1.0)] // 折扣 范围0%~100%
         public double? DiscountPresent { get; set; }
 
     }
