@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Ctrip.API.Database;
+using Ctrip.API.Models;
 using Ctrip.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,11 +9,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Ctrip.API
 {
@@ -64,6 +64,27 @@ namespace Ctrip.API
                     };
                 };
             });
+
+            // 添加认证服务
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                var secretByte = Encoding.UTF8.GetBytes(Configuration["Authentication:SecretKey"]);
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration["Authentication:Issuer"],
+
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["Authentication:Audience"],
+
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretByte)
+                };
+            });
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
             services.AddTransient<ITouristRouteRepository, TouristRouteRepository>();
 
             var builder = new SqlConnectionStringBuilder();
@@ -87,7 +108,12 @@ namespace Ctrip.API
                 app.UseDeveloperExceptionPage();
             }
 
+            // 你在哪里
             app.UseRouting();
+            // 你是谁
+            app.UseAuthentication();
+            // 你可以干啥(有啥权限)
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

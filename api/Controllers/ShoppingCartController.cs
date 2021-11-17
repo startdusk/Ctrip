@@ -33,7 +33,7 @@ namespace Ctrip.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetShoppingCart()
         {
             // 1 获得当前用户

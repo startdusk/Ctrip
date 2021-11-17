@@ -80,12 +80,14 @@ namespace Ctrip.API.Controllers
             var token = new JwtSecurityToken(
                 issuer: _configuration["Authentication:Issuer"],
                 audience: _configuration["Authentication:Audience"],
-                claims,
-                notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddDays(1),
-                signingCredentials
+                claims: claims,
+                notBefore: DateTime.UtcNow, // 发布时间
+                expires: DateTime.UtcNow.AddMinutes(
+                    _configuration.GetValue<double>("Authentication:ExpiredTimeMinutes")), // 过期时间(有效期)
+                signingCredentials: signingCredentials
             );
-
+            // 这里使用SymmetricSecurityKey有坑，长度必须大于128个bits
+            // https://stackoverflow.com/questions/47279947/idx10603-the-algorithm-hs256-requires-the-securitykey-keysize-to-be-greater
             var tokenStr = new JwtSecurityTokenHandler().WriteToken(token);
 
             // 3 return 200 ok + jwt
@@ -110,7 +112,7 @@ namespace Ctrip.API.Controllers
                 return BadRequest();
             }
 
-            // 3 初始化购物车
+            // 3 初始化购物车(注册用户时候必须初始化购物车，防止查询用户购物车时为空)
             var shoppingCart = new ShoppingCart()
             {
                 Id = Guid.NewGuid(),

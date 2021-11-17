@@ -11,6 +11,7 @@ namespace Ctrip.API.Models
         [Key]
         public Guid Id { get; set; }
         public string UserId { get; set; }
+        // 一个购物车有且仅有一个用户外键
         public ApplicationUser User { get; set; }
         public ICollection<LineItem> ShoppingCartItems { get; set; }
     }
