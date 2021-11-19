@@ -1,4 +1,5 @@
 ﻿using Ctrip.API.Database;
+using Ctrip.API.Helper;
 using Ctrip.API.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,7 +23,7 @@ namespace Ctrip.API.Services
             return await _context.TouristRoutes.Include(t => t.TouristRoutePictures).FirstOrDefaultAsync(n => n.Id == touristRouteId);
         }
 
-        public async Task<IEnumerable<TouristRoute>> GetTouristRoutesAsync(
+        public async Task<PaginationList<TouristRoute>> GetTouristRoutesAsync(
             string keyword,
             string ratingOperator,
             int? ratingValue,
@@ -53,13 +54,18 @@ namespace Ctrip.API.Services
             // 1.数据排序
             result = result.OrderBy(t => t.CreateTime);
             // 2.跳过一定量的数据
-            var skip = (pageNumber - 1) * pageSize;
-            result = result.Skip(skip);
-            // 3.以pagesize为标准显示一定数量的数据
-            result = result.Take(pageSize);
+            // var skip = (pageNumber - 1) * pageSize;
+            // result = result.Skip(skip);
+            // // 3.以pagesize为标准显示一定数量的数据
+            // result = result.Take(pageSize);
 
             // include vs join
-            return await result.ToListAsync();
+            // return await result.ToListAsync();            // var skip = (pageNumber - 1) * pageSize;
+            // result = result.Skip(skip);
+            // // 3.以pagesize为标准显示一定数量的数据
+            // result = result.Take(pageSize);
+
+            return await PaginationList<TouristRoute>.CreateAsync(pageNumber, pageSize, result);
         }
 
         public async Task<bool> TouristRouteExistsAsync(Guid touristRouteId)
