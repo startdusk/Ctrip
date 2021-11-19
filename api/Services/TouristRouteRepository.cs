@@ -25,9 +25,12 @@ namespace Ctrip.API.Services
         public async Task<IEnumerable<TouristRoute>> GetTouristRoutesAsync(
             string keyword,
             string ratingOperator,
-            int? ratingValue
+            int? ratingValue,
+            int pageNumber,
+            int pageSize
         )
         {
+            // IQueryable 延迟执行sql
             IQueryable<TouristRoute> result = _context
                 .TouristRoutes
                 .Include(t => t.TouristRoutePictures);
@@ -45,6 +48,16 @@ namespace Ctrip.API.Services
                     _ => result.Where(t => t.Rating == ratingValue),
                 };
             }
+
+            // 数据分页
+            // 1.数据排序
+            result = result.OrderBy(t => t.CreateTime);
+            // 2.跳过一定量的数据
+            var skip = (pageNumber - 1) * pageSize;
+            result = result.Skip(skip);
+            // 3.以pagesize为标准显示一定数量的数据
+            result = result.Take(pageSize);
+
             // include vs join
             return await result.ToListAsync();
         }
