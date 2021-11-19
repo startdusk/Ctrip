@@ -157,5 +157,24 @@ namespace Ctrip.API.Services
         {
             return (await _context.SaveChangesAsync() >= 0);
         }
+
+        public async Task AddOrderAsync(Order order)
+        {
+            await _context.Orders.AddAsync(order);
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersByUserId(string userId)
+        {
+            return await _context.Orders.Where(o => o.UserId == userId).ToListAsync();
+        }
+
+        public async Task<Order> GetOrdersByIdAndUserId(Guid orderId, string userId)
+        {
+            return await _context.Orders
+                .Where(o => o.UserId == userId)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.TouristRoute)
+                .Where(o => o.Id == orderId).FirstOrDefaultAsync();
+        }
     }
 }
