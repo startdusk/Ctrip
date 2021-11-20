@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Ctrip.API
 {
@@ -98,6 +99,8 @@ namespace Ctrip.API
             });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            // 导航上下文必须为单例模式
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

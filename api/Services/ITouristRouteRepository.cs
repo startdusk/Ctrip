@@ -28,7 +28,7 @@ namespace Ctrip.API.Services
         Task<IEnumerable<LineItem>> GeshoppingCartsByIdListAsync(IEnumerable<int> ids);
         void DeleteShoppingCartItems(IEnumerable<LineItem> lineItems);
         Task AddOrderAsync(Order order);
-        Task<IEnumerable<Order>> GetOrdersByUserId(string userId);
+        Task<PaginationList<Order>> GetOrdersByUserId(string userId, int pageNumber, int pageSize);
         Task<Order> GetOrdersByIdAndUserId(Guid orderId, string userId);
         Task<bool> SaveAsync();
     }

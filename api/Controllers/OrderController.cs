@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Ctrip.API.Dtos;
 using Ctrip.API.Services;
+using Ctrip.API.ResourceParameters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,13 +31,16 @@ namespace Ctrip.API.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] OrderResourceParamaters orderResourceParamaters)
         {
             // 1 获得当前用户
             var userId = _httpContextAccessor
                 .HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             // 2.使用用户id来获取订单历史记录
-            var orders = await _touristRouteRepository.GetOrdersByUserId(userId);
+            var orders = await _touristRouteRepository.GetOrdersByUserId(
+                userId,
+                orderResourceParamaters.PageNumber,
+                orderResourceParamaters.PageSize);
 
             return Ok(_mapper.Map<IEnumerable<OrderDto>>(orders));
         }

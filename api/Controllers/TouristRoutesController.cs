@@ -4,15 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ctrip.API.Dtos;
 using Ctrip.API.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using System.Text.RegularExpressions;
 using Ctrip.API.ResourceParameters;
 using Ctrip.API.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Ctrip.API.Helper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Ctrip.API.Controllers
 {
@@ -22,18 +22,22 @@ namespace Ctrip.API.Controllers
     {
         private ITouristRouteRepository _touristRouteRepository;
         private readonly IMapper _mapper;
+        private readonly IUrlHelper _urlHelper;
 
         public TouristRoutesController(
             ITouristRouteRepository touristRouteRepository,
-            IMapper mapper
+            IMapper mapper,
+            IUrlHelperFactory urlHelperFactory,
+            IActionContextAccessor actionContextAccessor
         )
         {
             _touristRouteRepository = touristRouteRepository;
             _mapper = mapper;
+            _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
         }
 
         // api/touristRoutes?keyword=传入的参数
-        [HttpGet]
+        [HttpGet(Name = "GerTouristRoutes")]
         [HttpHead]
         public async Task<IActionResult> GerTouristRoutes(
             [FromQuery] TouristRouteResourceParamaters paramaters
@@ -53,6 +57,23 @@ namespace Ctrip.API.Controllers
                 return NotFound("没有旅游路线");
             }
             var touristRoutesDto = _mapper.Map<IEnumerable<TouristRouteDto>>(touristRoutesFromRepo);
+
+            var previousPageLink = touristRoutesFromRepo.HasPrevious
+                ? GenerateTouristRouteResourceURL(paramaters, ResourceUriType.PreviousPage) : null;
+            var nextPageLink = touristRoutesFromRepo.HasNext
+                ? GenerateTouristRouteResourceURL(paramaters, ResourceUriType.NextPage) : null;
+
+            // 添加分页元信息头部 X-Pagination 
+            var paginationMetadata = new
+            {
+                previousPageLink,
+                nextPageLink,
+                totalCount = touristRoutesFromRepo.TotalCount,
+                pageSize = touristRoutesFromRepo.PageSize,
+                currentPage = touristRoutesFromRepo.CurrentPage,
+                totalPage = touristRoutesFromRepo.TotalCount
+            };
+            Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
             return Ok(touristRoutesDto);
         }
 
@@ -183,6 +204,40 @@ namespace Ctrip.API.Controllers
             await _touristRouteRepository.SaveAsync();
 
             return NoContent();
+        }
+
+        private string GenerateTouristRouteResourceURL(
+            TouristRouteResourceParamaters paramaters,
+            ResourceUriType type
+        )
+        {
+            return type switch
+            {
+                ResourceUriType.PreviousPage => _urlHelper.Link("GetTouristRoutes",
+                    new
+                    {
+                        keyword = paramaters.Keyword,
+                        rating = paramaters.Rating,
+                        pageNumber = paramaters.PageNumber - 1,
+                        pageSize = paramaters.PageSize
+                    }),
+                ResourceUriType.NextPage => _urlHelper.Link("GetTouristRoutes",
+                    new
+                    {
+                        keyword = paramaters.Keyword,
+                        rating = paramaters.Rating,
+                        pageNumber = paramaters.PageNumber + 1,
+                        pageSize = paramaters.PageSize
+                    }),
+                _ => _urlHelper.Link("GetTouristRoutes",
+                    new
+                    {
+                        keyword = paramaters.Keyword,
+                        rating = paramaters.Rating,
+                        pageNumber = paramaters.PageNumber,
+                        pageSize = paramaters.PageSize
+                    })
+            };
         }
     }
 }

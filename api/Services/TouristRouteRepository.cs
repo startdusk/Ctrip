@@ -52,7 +52,7 @@ namespace Ctrip.API.Services
 
             // 数据分页
             // 1.数据排序
-            result = result.OrderBy(t => t.CreateTime);
+            result = result.OrderByDescending(t => t.CreateTime);
             // 2.跳过一定量的数据
             // var skip = (pageNumber - 1) * pageSize;
             // result = result.Skip(skip);
@@ -182,9 +182,10 @@ namespace Ctrip.API.Services
             await _context.Orders.AddAsync(order);
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersByUserId(string userId)
+        public async Task<PaginationList<Order>> GetOrdersByUserId(string userId, int pageNumber, int pageSize)
         {
-            return await _context.Orders.Where(o => o.UserId == userId).ToListAsync();
+            var result = _context.Orders.Where(o => o.UserId == userId).OrderByDescending(o => o.CreateDateUTC);
+            return await PaginationList<Order>.CreateAsync(pageNumber, pageSize, result);
         }
 
         public async Task<Order> GetOrdersByIdAndUserId(Guid orderId, string userId)
