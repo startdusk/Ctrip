@@ -20,7 +20,7 @@ namespace Ctrip.API.Controllers
     [ApiController]
     public class TouristRoutesController : ControllerBase
     {
-        private ITouristRouteRepository _touristRouteRepository;
+        private readonly ITouristRouteRepository _touristRouteRepository;
         private readonly IMapper _mapper;
         private readonly IUrlHelper _urlHelper;
 
@@ -37,9 +37,9 @@ namespace Ctrip.API.Controllers
         }
 
         // api/touristRoutes?keyword=传入的参数
-        [HttpGet(Name = "GerTouristRoutes")]
+        [HttpGet(Name = "GetTouristRoutes")]
         [HttpHead]
-        public async Task<IActionResult> GerTouristRoutes(
+        public async Task<IActionResult> GetTouristRoutes(
             [FromQuery] TouristRouteResourceParamaters paramaters
         //[FromQuery] string keyword,
         //string rating // 小于lessThan, 大于largerThan, 等于equalTo lessThan3, largerThan2, equalTo5 
@@ -71,7 +71,7 @@ namespace Ctrip.API.Controllers
                 totalCount = touristRoutesFromRepo.TotalCount,
                 pageSize = touristRoutesFromRepo.PageSize,
                 currentPage = touristRoutesFromRepo.CurrentPage,
-                totalPage = touristRoutesFromRepo.TotalCount
+                totalPage = touristRoutesFromRepo.TotalPages
             };
             Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
             return Ok(touristRoutesDto);
@@ -108,7 +108,7 @@ namespace Ctrip.API.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateTouristRoute([FromBody] TouristRouteForCreationDto touristRouteForCreationDto)
         {
             var touristRouteModel = _mapper.Map<TouristRoute>(touristRouteForCreationDto);
