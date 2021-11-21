@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Ctrip.API.Dtos;
 using Ctrip.API.Models;
 using System.Linq;
+using System.Reflection;
 
 namespace Ctrip.API.Services
 {
@@ -55,6 +56,34 @@ namespace Ctrip.API.Services
                 }
             }
 
+            return true;
+        }
+
+        public bool IsPropertiesExists<T>(string fields)
+        {
+            if (string.IsNullOrWhiteSpace(fields))
+            {
+                return true;
+            }
+
+            // 逗号来分割字段字符
+            var fieldsAfterSplit = fields.Split(",");
+            foreach (var field in fieldsAfterSplit)
+            {
+                // 获取属性名称字符串
+                var propertyName = field.Trim();
+                var propertyInfo = typeof(T).GetProperty(
+                    propertyName,
+                    BindingFlags.IgnoreCase
+                    | BindingFlags.Public
+                    | BindingFlags.Instance
+                );
+                // 如果没有找到对应的属性
+                if (propertyInfo == null)
+                {
+                    return false;
+                }
+            }
             return true;
         }
 

@@ -6,5 +6,6 @@ namespace Ctrip.API.Services
     {
         Dictionary<string, PropertyMappingValue> GetPropertyMapping<TSource, TDestination>();
         bool IsMappingExists<TSource, TDestination>(string fileds);
+        bool IsPropertiesExists<T>(string fields);
     }
 }

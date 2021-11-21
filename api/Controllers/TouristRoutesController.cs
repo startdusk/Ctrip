@@ -52,6 +52,10 @@ namespace Ctrip.API.Controllers
             {
                 return BadRequest("请输入正确的排序参数");
             }
+            if (!_propertyMappingService.IsPropertiesExists<TouristRouteDto>(paramaters.Fields))
+            {
+                return BadRequest("请输入正确的塑形参数");
+            }
 
             var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesAsync(
                 paramaters.Keyword,
@@ -88,12 +92,20 @@ namespace Ctrip.API.Controllers
 
         // api/touristroutes/{touristRouteId}
         [HttpGet("{touristRouteId}", Name = "GetTouristRouteById")]
-        public async Task<IActionResult> GetTouristRouteById(Guid touristRouteId)
+        public async Task<IActionResult> GetTouristRouteById(
+            [FromRoute] Guid touristRouteId,
+            [FromQuery] string fields
+            )
         {
             var touristRouteFromRepo = await _touristRouteRepository.GetTouristRouteAsync(touristRouteId);
             if (touristRouteFromRepo == null)
             {
                 return NotFound($"旅游路线{touristRouteId}找不到");
+            }
+
+            if (!_propertyMappingService.IsPropertiesExists<TouristRouteDto>(fields))
+            {
+                return BadRequest("请输入正确的塑形参数");
             }
             //var touristRouteDto = new TouristRouteDto()
             //{
@@ -112,7 +124,7 @@ namespace Ctrip.API.Controllers
             //    DepartureCity = touristRouteFromRepo.DepartureCity.ToString()
             //};
             var touristRouteDto = _mapper.Map<TouristRouteDto>(touristRouteFromRepo);
-            return Ok(touristRouteDto);
+            return Ok(touristRouteDto.ShapeData(fields));
         }
 
         [HttpPost]
