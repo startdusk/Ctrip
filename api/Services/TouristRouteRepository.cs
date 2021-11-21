@@ -57,21 +57,23 @@ namespace Ctrip.API.Services
             // 数据分页
             // 1.数据排序
             // result = result.OrderByDescending(t => t.CreateTime);
-            if (!string.IsNullOrWhiteSpace(orderBy))
+            if (string.IsNullOrWhiteSpace(orderBy))
             {
-                // 如果为了效率使用 Invariant (在只有英语的情况下)
-                // if (orderBy.ToLowerInvariant() == "originalprice")
-                // {
-                //     result = result.OrderBy(t => t.OriginalPrice);
-                // }
-
-                // 使用插件动态映射字符串到对象属性去排序
-                // dotnet add package System.Linq.Dynamic.Core --version 1.2.14
-                var touristRouteMappingDictionary = _propertyMappingService
-                    .GetPropertyMapping<TouristRouteDto, TouristRoute>();
-
-                result = result.ApplySort(orderBy, touristRouteMappingDictionary);
+                // 添加默认按时间倒序排序
+                orderBy = "createTime desc";
             }
+            // 如果为了效率使用 Invariant (在只有英语的情况下)
+            // if (orderBy.ToLowerInvariant() == "originalprice")
+            // {
+            //     result = result.OrderBy(t => t.OriginalPrice);
+            // }
+
+            // 使用插件动态映射字符串到对象属性去排序
+            // dotnet add package System.Linq.Dynamic.Core --version 1.2.14
+            var touristRouteMappingDictionary = _propertyMappingService
+                .GetPropertyMapping<TouristRouteDto, TouristRoute>();
+
+            result = result.ApplySort(orderBy, touristRouteMappingDictionary);
             // 2.跳过一定量的数据
             // var skip = (pageNumber - 1) * pageSize;
             // result = result.Skip(skip);

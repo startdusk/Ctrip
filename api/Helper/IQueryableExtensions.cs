@@ -9,7 +9,7 @@ namespace Ctrip.API.Helper
     public static class IQueryableExtensions
     {
         public static IQueryable<T> ApplySort<T>(
-            // 拓展方法需要加this,并且返回这个this
+            // 拓展方法需要加this
             this IQueryable<T> source,
             string orderBy,
             Dictionary<string, PropertyMappingValue> mappingDictionary

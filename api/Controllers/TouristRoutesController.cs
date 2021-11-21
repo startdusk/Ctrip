@@ -83,7 +83,7 @@ namespace Ctrip.API.Controllers
                 totalPage = touristRoutesFromRepo.TotalPages
             };
             Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
-            return Ok(touristRoutesDto);
+            return Ok(touristRoutesDto.ShapeData(paramaters.Fields));
         }
 
         // api/touristroutes/{touristRouteId}
@@ -225,6 +225,7 @@ namespace Ctrip.API.Controllers
                 ResourceUriType.PreviousPage => _urlHelper.Link("GetTouristRoutes",
                     new
                     {
+                        fields = paramaters.Fields,
                         orderBy = paramaters.OrderBy,
                         keyword = paramaters.Keyword,
                         rating = paramaters.Rating,
@@ -234,6 +235,7 @@ namespace Ctrip.API.Controllers
                 ResourceUriType.NextPage => _urlHelper.Link("GetTouristRoutes",
                     new
                     {
+                        fields = paramaters.Fields,
                         orderBy = paramaters.OrderBy,
                         keyword = paramaters.Keyword,
                         rating = paramaters.Rating,
@@ -243,6 +245,7 @@ namespace Ctrip.API.Controllers
                 _ => _urlHelper.Link("GetTouristRoutes",
                     new
                     {
+                        fields = paramaters.Fields,
                         orderBy = paramaters.OrderBy,
                         keyword = paramaters.Keyword,
                         rating = paramaters.Rating,

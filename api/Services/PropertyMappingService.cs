@@ -14,7 +14,8 @@ namespace Ctrip.API.Services
                 {"Id", new PropertyMappingValue(new List<string>() {"Id"})},
                 {"Title", new PropertyMappingValue(new List<string>() {"Title"})},
                 {"Rating", new PropertyMappingValue(new List<string>() {"Rating"})},
-                {"OriginalPrice", new PropertyMappingValue(new List<string>() {"OriginalPrice"})}
+                {"OriginalPrice", new PropertyMappingValue(new List<string>() {"OriginalPrice"})},
+                {"CreateTime", new PropertyMappingValue(new List<string>() {"CreateTime"})}
             };
 
         private IList<IPropertyMapping> _properyMappings = new List<IPropertyMapping>();
