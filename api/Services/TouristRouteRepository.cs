@@ -1,4 +1,5 @@
 ﻿using Ctrip.API.Database;
+using Ctrip.API.Dtos;
 using Ctrip.API.Helper;
 using Ctrip.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,12 @@ namespace Ctrip.API.Services
     public class TouristRouteRepository : ITouristRouteRepository
     {
         private readonly AppDbContext _context;
+        private readonly IPropertyMappingService _propertyMappingService;
 
-        public TouristRouteRepository(AppDbContext appDbContext)
+        public TouristRouteRepository(AppDbContext appDbContext, IPropertyMappingService propertyMappingService)
         {
             _context = appDbContext;
+            _propertyMappingService = propertyMappingService;
         }
 
         public async Task<TouristRoute> GetTouristRouteAsync(Guid touristRouteId)
@@ -28,7 +31,8 @@ namespace Ctrip.API.Services
             string ratingOperator,
             int? ratingValue,
             int pageNumber,
-            int pageSize
+            int pageSize,
+            string orderBy
         )
         {
             // IQueryable 延迟执行sql
@@ -52,7 +56,22 @@ namespace Ctrip.API.Services
 
             // 数据分页
             // 1.数据排序
-            result = result.OrderByDescending(t => t.CreateTime);
+            // result = result.OrderByDescending(t => t.CreateTime);
+            if (!string.IsNullOrWhiteSpace(orderBy))
+            {
+                // 如果为了效率使用 Invariant (在只有英语的情况下)
+                // if (orderBy.ToLowerInvariant() == "originalprice")
+                // {
+                //     result = result.OrderBy(t => t.OriginalPrice);
+                // }
+
+                // 使用插件动态映射字符串到对象属性去排序
+                // dotnet add package System.Linq.Dynamic.Core --version 1.2.14
+                var touristRouteMappingDictionary = _propertyMappingService
+                    .GetPropertyMapping<TouristRouteDto, TouristRoute>();
+
+                result = result.ApplySort(orderBy, touristRouteMappingDictionary);
+            }
             // 2.跳过一定量的数据
             // var skip = (pageNumber - 1) * pageSize;
             // result = result.Skip(skip);

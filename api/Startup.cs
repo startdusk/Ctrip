@@ -101,6 +101,7 @@ namespace Ctrip.API
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             // 导航上下文必须为单例模式
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddTransient<IPropertyMappingService, PropertyMappingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

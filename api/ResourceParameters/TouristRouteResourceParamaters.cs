@@ -6,6 +6,7 @@ namespace Ctrip.API.ResourceParameters
     // 旅游路线分页参数
     public class TouristRouteResourceParamaters : PaginationResourceParamaters
     {
+        public string OrderBy { get; set; }
         public string Keyword { get; set; }
         public string RatingOperator { get; set; }
         public int? RatingValue { get; set; }

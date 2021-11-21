@@ -23,17 +23,20 @@ namespace Ctrip.API.Controllers
         private readonly ITouristRouteRepository _touristRouteRepository;
         private readonly IMapper _mapper;
         private readonly IUrlHelper _urlHelper;
+        private readonly IPropertyMappingService _propertyMappingService;
 
         public TouristRoutesController(
             ITouristRouteRepository touristRouteRepository,
             IMapper mapper,
             IUrlHelperFactory urlHelperFactory,
-            IActionContextAccessor actionContextAccessor
+            IActionContextAccessor actionContextAccessor,
+            IPropertyMappingService propertyMappingService
         )
         {
             _touristRouteRepository = touristRouteRepository;
             _mapper = mapper;
             _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+            _propertyMappingService = propertyMappingService;
         }
 
         // api/touristRoutes?keyword=传入的参数
@@ -45,12 +48,18 @@ namespace Ctrip.API.Controllers
         //string rating // 小于lessThan, 大于largerThan, 等于equalTo lessThan3, largerThan2, equalTo5 
         )// FromQuery vs FromBody
         {
+            if (!_propertyMappingService.IsMappingExists<TouristRouteDto, TouristRoute>(paramaters.OrderBy))
+            {
+                return BadRequest("请输入正确的排序参数");
+            }
+
             var touristRoutesFromRepo = await _touristRouteRepository.GetTouristRoutesAsync(
                 paramaters.Keyword,
                 paramaters.RatingOperator,
                 paramaters.RatingValue,
                 paramaters.PageNumber,
-                paramaters.PageSize
+                paramaters.PageSize,
+                paramaters.OrderBy
             );
             if (touristRoutesFromRepo == null || touristRoutesFromRepo.Count() <= 0)
             {
@@ -216,6 +225,7 @@ namespace Ctrip.API.Controllers
                 ResourceUriType.PreviousPage => _urlHelper.Link("GetTouristRoutes",
                     new
                     {
+                        orderBy = paramaters.OrderBy,
                         keyword = paramaters.Keyword,
                         rating = paramaters.Rating,
                         pageNumber = paramaters.PageNumber - 1,
@@ -224,6 +234,7 @@ namespace Ctrip.API.Controllers
                 ResourceUriType.NextPage => _urlHelper.Link("GetTouristRoutes",
                     new
                     {
+                        orderBy = paramaters.OrderBy,
                         keyword = paramaters.Keyword,
                         rating = paramaters.Rating,
                         pageNumber = paramaters.PageNumber + 1,
@@ -232,6 +243,7 @@ namespace Ctrip.API.Controllers
                 _ => _urlHelper.Link("GetTouristRoutes",
                     new
                     {
+                        orderBy = paramaters.OrderBy,
                         keyword = paramaters.Keyword,
                         rating = paramaters.Rating,
                         pageNumber = paramaters.PageNumber,
