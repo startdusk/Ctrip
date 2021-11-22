@@ -33,7 +33,7 @@ namespace Ctrip.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetShoppingCart")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetShoppingCart()
         {
@@ -47,7 +47,7 @@ namespace Ctrip.API.Controllers
             return Ok(_mapper.Map<ShoppingCartDto>(shoppingCart));
         }
 
-        [HttpPost("items")]
+        [HttpPost("items", Name = "AddShoppingCartItem")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> AddShoppingCartItem(
             [FromBody] AddShoppingCartItemDto addShoppingCartItemDto
@@ -84,7 +84,7 @@ namespace Ctrip.API.Controllers
             return Ok(_mapper.Map<ShoppingCartDto>(shoppingCart));
         }
 
-        [HttpDelete("items/{itemId}")]
+        [HttpDelete("items/{itemId}", Name = "DeleteShoppingCartItem")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> DeleteShoppingCartItem([FromRoute] int itemId)
         {
@@ -102,7 +102,7 @@ namespace Ctrip.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("items/({itemIDs})")]
+        [HttpDelete("items/({itemIDs})", Name = "RemoveShoppingCartItems")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> RemoveShoppingCartItems(
             [ModelBinder(BinderType = typeof(ArrayModelBinder))]
@@ -118,7 +118,7 @@ namespace Ctrip.API.Controllers
             return NoContent();
         }
 
-        [HttpPost("checkout")]
+        [HttpPost("checkout", Name = "Checkout")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Checkout()
         {

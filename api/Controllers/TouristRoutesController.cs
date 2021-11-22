@@ -87,7 +87,23 @@ namespace Ctrip.API.Controllers
                 totalPage = touristRoutesFromRepo.TotalPages
             };
             Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
-            return Ok(touristRoutesDto.ShapeData(paramaters.Fields));
+            var shapedDtoList = touristRoutesDto.ShapeData(paramaters.Fields);
+            var linkDto = CreateLinkForTouristRouteList(paramaters);
+            var shapedDtoWithLinkList = shapedDtoList.Select(t =>
+            {
+                var touristRouteDictionary = t as IDictionary<string, object>;
+                var links = CreateLinkForTouristRoute((Guid)touristRouteDictionary["Id"], null);
+                touristRouteDictionary.Add("links", links);
+                return touristRouteDictionary;
+            });
+
+            var result = new
+            {
+                value = shapedDtoWithLinkList,
+                links = linkDto
+            };
+
+            return Ok(result);
         }
 
         // api/touristroutes/{touristRouteId}
@@ -115,7 +131,7 @@ namespace Ctrip.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateTouristRoute")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateTouristRoute([FromBody] TouristRouteForCreationDto touristRouteForCreationDto)
@@ -323,6 +339,30 @@ namespace Ctrip.API.Controllers
                     Method = "POST"
                 });
 
+            return links;
+        }
+
+
+        private IEnumerable<LinkDto> CreateLinkForTouristRouteList(
+            TouristRouteResourceParamaters paramaters)
+        {
+            var links = new List<LinkDto>();
+            // 添加self，自我链接
+            links.Add(new LinkDto()
+            {
+                Href = GenerateTouristRouteResourceURL(paramaters, ResourceUriType.CurrentPage),
+                Rel = "self",
+                Method = "GET"
+            });
+
+            // api/touristRoutes
+            // 添加创建旅游路线
+            links.Add(new LinkDto()
+            {
+                Href = Url.Link("CreateTouristRoute", null),
+                Rel = "create_tourist_route",
+                Method = "POST"
+            });
             return links;
         }
     }

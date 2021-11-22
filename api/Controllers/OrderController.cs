@@ -29,7 +29,7 @@ namespace Ctrip.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetOrders")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Get([FromQuery] OrderResourceParamaters orderResourceParamaters)
         {
@@ -45,7 +45,7 @@ namespace Ctrip.API.Controllers
             return Ok(_mapper.Map<IEnumerable<OrderDto>>(orders));
         }
 
-        [HttpGet("{orderId}")]
+        [HttpGet("{orderId}", Name = "GetOrderById")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetOrderById([FromRoute] Guid orderId)
         {
