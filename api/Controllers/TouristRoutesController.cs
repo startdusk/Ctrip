@@ -13,6 +13,7 @@ using Ctrip.API.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Net.Http.Headers;
 
 namespace Ctrip.API.Controllers
 {
@@ -40,14 +41,23 @@ namespace Ctrip.API.Controllers
         }
 
         // api/touristRoutes?keyword=传入的参数
+        // 根据下面的头部返回资源或hateoas
+        // 1.application/json -> 旅游路线资源
+        // 2.application/vnd.{公司名称}.hateoas+json -> vnd = vendor(供应商)
         [HttpGet(Name = "GetTouristRoutes")]
         [HttpHead]
         public async Task<IActionResult> GetTouristRoutes(
-            [FromQuery] TouristRouteResourceParamaters paramaters
+            [FromQuery] TouristRouteResourceParamaters paramaters,
+            [FromHeader(Name = "Accept")] List<string> mediaType
         //[FromQuery] string keyword,
         //string rating // 小于lessThan, 大于largerThan, 等于equalTo lessThan3, largerThan2, equalTo5 
         )// FromQuery vs FromBody
         {
+            // Accept 可能不止一个，所以要用List
+            if (!MediaTypeHeaderValue.TryParseList(mediaType, out IList<MediaTypeHeaderValue> parsedMediaTypeList))
+            {
+                return BadRequest();
+            }
             if (!_propertyMappingService.IsMappingExists<TouristRouteDto, TouristRoute>(paramaters.OrderBy))
             {
                 return BadRequest("请输入正确的排序参数");
@@ -88,22 +98,29 @@ namespace Ctrip.API.Controllers
             };
             Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
             var shapedDtoList = touristRoutesDto.ShapeData(paramaters.Fields);
-            var linkDto = CreateLinkForTouristRouteList(paramaters);
-            var shapedDtoWithLinkList = shapedDtoList.Select(t =>
-            {
-                var touristRouteDictionary = t as IDictionary<string, object>;
-                var links = CreateLinkForTouristRoute((Guid)touristRouteDictionary["Id"], null);
-                touristRouteDictionary.Add("links", links);
-                return touristRouteDictionary;
-            });
 
-            var result = new
+            var mediaTypeList = parsedMediaTypeList.Where(m => m.MediaType == "application/vnd.ctrip.hateoas+json");
+            if (mediaTypeList != null && mediaTypeList.Count() > 0)
             {
-                value = shapedDtoWithLinkList,
-                links = linkDto
-            };
+                var linkDto = CreateLinkForTouristRouteList(paramaters);
+                var shapedDtoWithLinkList = shapedDtoList.Select(t =>
+                {
+                    var touristRouteDictionary = t as IDictionary<string, object>;
+                    var links = CreateLinkForTouristRoute((Guid)touristRouteDictionary["Id"], null);
+                    touristRouteDictionary.Add("links", links);
+                    return touristRouteDictionary;
+                });
 
-            return Ok(result);
+                var result = new
+                {
+                    value = shapedDtoWithLinkList,
+                    links = linkDto
+                };
+
+                return Ok(result);
+            }
+
+            return Ok(shapedDtoList);
         }
 
         // api/touristroutes/{touristRouteId}

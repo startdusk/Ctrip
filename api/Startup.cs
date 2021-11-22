@@ -17,6 +17,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Ctrip.API
 {
@@ -103,6 +105,17 @@ namespace Ctrip.API
             // 导航上下文必须为单例模式
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
+
+            // 添加自定义媒体类型
+            services.Configure<MvcOptions>(config =>
+            {
+                var outputFormatter = config.OutputFormatters
+                    .OfType<NewtonsoftJsonOutputFormatter>()?.FirstOrDefault();
+                if (outputFormatter != null)
+                {
+                    outputFormatter.SupportedMediaTypes.Add("application/vnd.ctrip.hateoas+json");
+                }
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
