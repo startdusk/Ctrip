@@ -107,24 +107,12 @@ namespace Ctrip.API.Controllers
             {
                 return BadRequest("请输入正确的塑形参数");
             }
-            //var touristRouteDto = new TouristRouteDto()
-            //{
-            //    Id = touristRouteFromRepo.Id,
-            //    Title = touristRouteFromRepo.Title,
-            //    Description = touristRouteFromRepo.Description,
-            //    Price = touristRouteFromRepo.OriginalPrice * (decimal)(touristRouteFromRepo.DiscountPresent ?? 1),
-            //    CreateTime = touristRouteFromRepo.CreateTime,
-            //    UpdateTime = touristRouteFromRepo.UpdateTime,
-            //    Features = touristRouteFromRepo.Features,
-            //    Fees = touristRouteFromRepo.Fees,
-            //    Notes = touristRouteFromRepo.Notes,
-            //    Rating = touristRouteFromRepo.Rating,
-            //    TravelDays = touristRouteFromRepo.TravelDays.ToString(),
-            //    TripType = touristRouteFromRepo.TripType.ToString(),
-            //    DepartureCity = touristRouteFromRepo.DepartureCity.ToString()
-            //};
+
             var touristRouteDto = _mapper.Map<TouristRouteDto>(touristRouteFromRepo);
-            return Ok(touristRouteDto.ShapeData(fields));
+            var result = touristRouteDto.ShapeData(fields) as IDictionary<string, object>;
+            var links = CreateLinkForTouristRoute(touristRouteId, fields);
+            result.Add("links", links);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -133,17 +121,22 @@ namespace Ctrip.API.Controllers
         public async Task<IActionResult> CreateTouristRoute([FromBody] TouristRouteForCreationDto touristRouteForCreationDto)
         {
             var touristRouteModel = _mapper.Map<TouristRoute>(touristRouteForCreationDto);
+            touristRouteModel.CreateTime = DateTime.Now;
             _touristRouteRepository.AddTouristRoute(touristRouteModel);
             await _touristRouteRepository.SaveAsync();
             var touristRouteToReture = _mapper.Map<TouristRouteDto>(touristRouteModel);
+
+            var links = CreateLinkForTouristRoute(touristRouteToReture.Id, null);
+            var result = touristRouteToReture.ShapeData(null) as IDictionary<string, object>;
+            result.Add("links", links);
             return CreatedAtRoute(
                 "GetTouristRouteById",
                 new { touristRouteId = touristRouteToReture.Id },
-                touristRouteToReture
+                result
             );
         }
 
-        [HttpPut("{touristRouteId}")]
+        [HttpPut("{touristRouteId}", Name = "UpdateTouristRoute")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateTouristRoute(
@@ -161,13 +154,13 @@ namespace Ctrip.API.Controllers
             // 2. 更新dto
             // 3. 映射model
             _mapper.Map(touristRouteForUpdateDto, touristRouteFromRepo);
-
+            touristRouteFromRepo.UpdateTime = DateTime.Now;
             await _touristRouteRepository.SaveAsync();
 
             return NoContent();
         }
 
-        [HttpPatch("{touristRouteId}")]
+        [HttpPatch("{touristRouteId}", Name = "PartiallyUpdateTouristRoute")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PartiallyUpdateTouristRoute(
@@ -188,12 +181,13 @@ namespace Ctrip.API.Controllers
                 return ValidationProblem(ModelState);
             }
             _mapper.Map(touristRouteToPatch, touristRouteFromRepo);
+            touristRouteFromRepo.UpdateTime = DateTime.Now;
             await _touristRouteRepository.SaveAsync();
 
             return NoContent();
         }
 
-        [HttpDelete("{touristRouteId}")]
+        [HttpDelete("{touristRouteId}", Name = "DeleteTouristRoute")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTouristRoute([FromRoute] Guid touristRouteId)
@@ -204,6 +198,7 @@ namespace Ctrip.API.Controllers
             }
 
             var touristRoute = await _touristRouteRepository.GetTouristRouteAsync(touristRouteId);
+            touristRoute.DepartureTime = DateTime.Now;
             _touristRouteRepository.DeleteTouristRoute(touristRoute);
             await _touristRouteRepository.SaveAsync();
 
@@ -265,6 +260,70 @@ namespace Ctrip.API.Controllers
                         pageSize = paramaters.PageSize
                     })
             };
+        }
+
+        private IEnumerable<LinkDto> CreateLinkForTouristRoute(
+            Guid touristRouteId,
+            string fields)
+        {
+            var links = new List<LinkDto>();
+
+            links.Add(
+                new LinkDto()
+                {
+                    Href = Url.Link("GetTouristRouteById", new { touristRouteId, fields }),
+                    Rel = "self",
+                    Method = "GET"
+                });
+
+            // 更新
+            links.Add(
+                new LinkDto()
+                {
+                    Href = Url.Link("UpdateTouristRoute", new { touristRouteId }),
+                    Rel = "update",
+                    Method = "PUT"
+                });
+
+            // 局部更新 
+            links.Add(
+                new LinkDto()
+                {
+                    Href = Url.Link("PartiallyUpdateTouristRoute", new { touristRouteId }),
+                    Rel = "partially_update",
+                    Method = "PATCH"
+                });
+
+            // 删除
+            links.Add(
+                new LinkDto()
+                {
+                    Href = Url.Link("DeleteTouristRoute", new { touristRouteId }),
+                    Rel = "delete",
+                    Method = "DELETE"
+                });
+
+            // 获取路线图片
+            links.Add(
+                new LinkDto()
+                {
+
+                    Href = Url.Link("GetPictureListForTouristRoute", new { touristRouteId }),
+                    Rel = "get_pictures",
+                    Method = "GET"
+                });
+
+            // 添加新图片
+            links.Add(
+                new LinkDto()
+                {
+
+                    Href = Url.Link("CreateTouristRoutePicture", new { touristRouteId }),
+                    Rel = "create_picture",
+                    Method = "POST"
+                });
+
+            return links;
         }
     }
 }

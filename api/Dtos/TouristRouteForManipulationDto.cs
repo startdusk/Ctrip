@@ -15,11 +15,12 @@ namespace Ctrip.API.Dtos
         public string Title { get; set; }
         [Required]
         [MaxLength(1500)]
+        // virtual的字段才可以被override
         public virtual string Description { get; set; }
         // 计算方式：原价 * 折扣
         public decimal Price { get; set; }
-        //public decimal OriginalPrice { get; set; }
-        //public double? DiscountPresent { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public double? DiscountPresent { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
         public DateTime? DepartureTime { get; set; }

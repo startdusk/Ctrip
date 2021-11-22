@@ -44,6 +44,7 @@ namespace Ctrip.API
             {
                 setupAction.SerializerSettings.ContractResolver =
                     new CamelCasePropertyNamesContractResolver();
+                setupAction.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
             })
             .AddXmlDataContractSerializerFormatters()
             .ConfigureApiBehaviorOptions(setupAction =>

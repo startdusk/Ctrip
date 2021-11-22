@@ -15,8 +15,8 @@ namespace Ctrip.API.Controllers
     [ApiController]
     public class TouristRoutePicturesController : ControllerBase
     {
-        private ITouristRouteRepository _touristRouteRepository;
-        private IMapper _mapper;
+        private readonly ITouristRouteRepository _touristRouteRepository;
+        private readonly IMapper _mapper;
 
         public TouristRoutePicturesController(
             ITouristRouteRepository touristRouteRepository,
@@ -29,7 +29,7 @@ namespace Ctrip.API.Controllers
                 throw new ArgumentNullException(nameof(mapper));
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetPictureListForTouristRoute")]
         public async Task<IActionResult> GetPictureListForTouristRoute(Guid touristRouteId)
         {
             if (!(await _touristRouteRepository.TouristRouteExistsAsync(touristRouteId)))
@@ -63,7 +63,7 @@ namespace Ctrip.API.Controllers
             return Ok(_mapper.Map<TouristRoutePictureDto>(pictureFromRepo));
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateTouristRoutePicture")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateTouristRoutePicture(
