@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Ctrip.API.Dtos
 {
     public class AddShoppingCartItemDto
     {
+        [JsonProperty("tourist_route_id")]
+        [JsonRequired]
         public Guid TouristRouteId { get; set; }
     }
 }

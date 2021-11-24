@@ -1,19 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace Ctrip.API.Dtos
 {
     public class RegisterDto
     {
-        [Required]
+        [JsonRequired]
+        [JsonProperty("email")]
+        [MaxLength(100)]
+        [EmailAddress]
         public string Email { get; set; }
-        [Required]
+        
+        [JsonRequired]
+        [JsonProperty("password")]
+        [MaxLength(32)]
         public string Password { get; set; }
-        [Required]
+
+        [JsonRequired]
+        [JsonProperty("confirm_password")]
         [Compare(nameof(Password), ErrorMessage = "密码输入不一致")]
+        [MaxLength(32)]
         public string ConfirmPassword { get; set; }
     }
 }

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace Ctrip.API.Dtos
 {
     public class LoginDto
     {
-        [Required]
+        [JsonRequired]
+        [JsonProperty("email")]
+        [MaxLength(100)]
         public string Email { get; set; }
-        [Required]
+        [JsonRequired]
+        [JsonProperty("password")]
         public string Password { get; set; }
     }
 }

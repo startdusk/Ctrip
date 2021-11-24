@@ -35,6 +35,7 @@ namespace Ctrip.API.Database
             //    CreateTime = DateTime.UtcNow
             //});
 
+
             var touristRouteJsonData = File.ReadAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"/Database/touristRoutesMockData.json");
             IList<TouristRoute> touristRoutes = JsonConvert.DeserializeObject<IList<TouristRoute>>(touristRouteJsonData);
             modelBuilder.Entity<TouristRoute>().HasData(touristRoutes);
@@ -66,7 +67,7 @@ namespace Ctrip.API.Database
 
             // 3. 添加用户
             var adminUserId = "90184155-dee0-40c9-bb1e-b5ed07afc04e";
-            ApplicationUser adminUser = new ApplicationUser
+            ApplicationUser adminUser = new ApplicationUser()
             {
                 Id = adminUserId,
                 UserName = "admin@fakexiecheng.com",
@@ -76,13 +77,21 @@ namespace Ctrip.API.Database
                 TwoFactorEnabled = false,
                 EmailConfirmed = true,
                 PhoneNumber = "123456789",
-                PhoneNumberConfirmed = false
+                PhoneNumberConfirmed = false,
             };
             PasswordHasher<ApplicationUser> ph = new PasswordHasher<ApplicationUser>();
             adminUser.PasswordHash = ph.HashPassword(adminUser, "Fake123$");
             modelBuilder.Entity<ApplicationUser>().HasData(adminUser);
 
-            // 4. 给用户加入管理员权限
+            // 4. 给用户初始化购物车
+            var shoppingCart = new ShoppingCart()
+            {
+                Id = Guid.NewGuid(),
+                UserId = adminUserId
+            };
+            modelBuilder.Entity<ShoppingCart>().HasData(shoppingCart);
+
+            // 5. 给用户加入管理员权限
             // 通过使用 linking table：IdentityUserRole
             modelBuilder.Entity<IdentityUserRole<string>>()
                 .HasData(new IdentityUserRole<string>()
@@ -92,6 +101,7 @@ namespace Ctrip.API.Database
                 });
 
             base.OnModelCreating(modelBuilder);
+            modelBuilder.SetSimpleUnderscoreTableNameConvention();
         }
     }
 }

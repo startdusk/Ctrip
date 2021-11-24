@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
-using Microsoft.Data.SqlClient;
+using Npgsql;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Formatters;
+
 
 namespace Ctrip.API
 {
@@ -38,17 +39,20 @@ namespace Ctrip.API
             services.AddControllers(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true;
-                //setupAction.OutputFormatters.Add(
-                //    new XmlDataContractSerializerOutputFormatter()    
-                //);
             })
             .AddNewtonsoftJson(setupAction =>
             {
+                // 设置返回的json key格式为小写字符加下划线，需要安装Microsoft.AspNetCore.Mvc.NewtonsoftJson
                 setupAction.SerializerSettings.ContractResolver =
-                    new CamelCasePropertyNamesContractResolver();
+                new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy(
+                        processDictionaryKeys: true, // 同样处理字典对象的字段
+                        overrideSpecifiedNames: false // 如果object的属性上有JsonPropertyAttribute，就采用属性的字段名
+                    )
+                };
                 setupAction.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
             })
-            .AddXmlDataContractSerializerFormatters()
             .ConfigureApiBehaviorOptions(setupAction =>
             {
                 setupAction.InvalidModelStateResponseFactory = context =>
@@ -91,14 +95,16 @@ namespace Ctrip.API
                 .AddEntityFrameworkStores<AppDbContext>();
             services.AddTransient<ITouristRouteRepository, TouristRouteRepository>();
 
-            var builder = new SqlConnectionStringBuilder();
+            var builder = new NpgsqlConnectionStringBuilder();
             builder.ConnectionString = Configuration["DbContext:ConnectionString"];
-            builder.UserID = Configuration["UserID"];
-            builder.Password = Configuration["Password"];
-            builder.DataSource = Configuration["DataSource"];
+            // builder.UserID = Configuration["UserID"];
+            // builder.Password = Configuration["Password"];
+            // builder.DataSource = Configuration["DataSource"];
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(builder.ConnectionString);
+                // options.UseSqlServer(builder.ConnectionString);
+                options.UseNpgsql(builder.ConnectionString)
+                    .UseSnakeCaseNamingConvention();
             });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
