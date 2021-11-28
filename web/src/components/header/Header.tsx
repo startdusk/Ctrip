@@ -8,7 +8,7 @@ import styles from "./Header.module.css";
 
 interface HeaderProps {}
 
-export const Header: React.FC<HeaderProps> = ({}) => {
+export const Header: React.FC<HeaderProps> = () => {
   return (
     <>
       <div className={styles["app-header"]}>
@@ -37,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({}) => {
         <Layout.Header className={styles["main-header"]}>
           <img src={logo} alt="logo" className={styles["App-logo"]} />
           <Typography.Title level={3} className={styles.title}>
-            React旅游网
+            Ctrip旅游网
           </Typography.Title>
           <Input.Search
             placeholder={"请输入旅游目的地、主题、或关键字"}
