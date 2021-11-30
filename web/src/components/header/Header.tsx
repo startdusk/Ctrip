@@ -2,6 +2,7 @@ import React from "react";
 
 import { Layout, Typography, Input, Menu, Button, Dropdown } from "antd";
 import { GlobalOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router";
 
 import logo from "../../assets/logo.svg";
 import styles from "./Header.module.css";
@@ -9,6 +10,7 @@ import styles from "./Header.module.css";
 interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className={styles["app-header"]}>
@@ -29,16 +31,18 @@ export const Header: React.FC<HeaderProps> = () => {
               语言
             </Dropdown.Button>
             <Button.Group className={styles["button-group"]}>
-              <Button>注册</Button>
-              <Button>登陆</Button>
+              <Button onClick={() => navigate("register")}>注册</Button>
+              <Button onClick={() => navigate("signin")}>登陆</Button>
             </Button.Group>
           </div>
         </div>
         <Layout.Header className={styles["main-header"]}>
-          <img src={logo} alt="logo" className={styles["App-logo"]} />
-          <Typography.Title level={3} className={styles.title}>
-            Ctrip旅游网
-          </Typography.Title>
+          <span onClick={() => navigate("/")}>
+            <img src={logo} alt="logo" className={styles["App-logo"]} />
+            <Typography.Title level={3} className={styles.title}>
+              Ctrip旅游网
+            </Typography.Title>
+          </span>
           <Input.Search
             placeholder={"请输入旅游目的地、主题、或关键字"}
             className={styles["search-input"]}
