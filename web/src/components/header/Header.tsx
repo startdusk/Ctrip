@@ -13,6 +13,15 @@ interface HeaderProps {}
 export const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const { language, languageList } = store.getState();
+
+  const manualClick = (e) => {
+    const s = {
+      type: "change_language",
+      payload: e.key,
+    };
+    store.dispatch(s);
+  };
+
   return (
     <>
       <div className={styles["app-header"]}>
@@ -23,7 +32,7 @@ export const Header: React.FC<HeaderProps> = () => {
             <Dropdown.Button
               style={{ marginLeft: 15 }}
               overlay={
-                <Menu>
+                <Menu onClick={manualClick}>
                   {languageList.map((l) => (
                     <Menu.Item key={l.code}>{l.name}</Menu.Item>
                   ))}

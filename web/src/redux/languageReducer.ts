@@ -16,6 +16,11 @@ const defaultState: LanguageState = {
 };
 
 const languageReducer = (state = defaultState, action) => {
+  if (action.type == "change_language") {
+    const newState = { ...state, language: action.payload };
+    console.log(newState);
+    return newState;
+  }
   return state;
 };
 
