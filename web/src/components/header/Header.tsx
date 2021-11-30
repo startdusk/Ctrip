@@ -6,11 +6,13 @@ import { useNavigate } from "react-router";
 
 import logo from "../../assets/logo.svg";
 import styles from "./Header.module.css";
+import store from "../../redux/store";
 
 interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
+  const { language, languageList } = store.getState();
   return (
     <>
       <div className={styles["app-header"]}>
@@ -22,13 +24,14 @@ export const Header: React.FC<HeaderProps> = () => {
               style={{ marginLeft: 15 }}
               overlay={
                 <Menu>
-                  <Menu.Item>中文</Menu.Item>
-                  <Menu.Item>English</Menu.Item>
+                  {languageList.map((l) => (
+                    <Menu.Item key={l.code}>{l.name}</Menu.Item>
+                  ))}
                 </Menu>
               }
               icon={<GlobalOutlined />}
             >
-              语言
+              {language === "zh" ? "中文" : "English"}
             </Dropdown.Button>
             <Button.Group className={styles["button-group"]}>
               <Button onClick={() => navigate("register")}>注册</Button>
