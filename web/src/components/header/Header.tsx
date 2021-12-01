@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Layout, Typography, Input, Menu, Button, Dropdown } from "antd";
 import { GlobalOutlined } from "@ant-design/icons";
@@ -13,13 +13,33 @@ interface HeaderProps {}
 export const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const { language, languageList } = store.getState();
+  const [, setLanguage] = useState({
+    language,
+    languageList,
+  });
+  store.subscribe(() => {
+    const { language, languageList } = store.getState();
+    setLanguage({
+      language,
+      languageList,
+    });
+  });
 
   const manualClick = (e) => {
-    const s = {
-      type: "change_language",
-      payload: e.key,
-    };
-    store.dispatch(s);
+    if (e.key === "new") {
+      // 处理新语言添加action
+      const s = {
+        type: "add_language",
+        payload: { code: "new_lang", name: "新语言" },
+      };
+      store.dispatch(s);
+    } else {
+      const s = {
+        type: "change_language",
+        payload: e.key,
+      };
+      store.dispatch(s);
+    }
   };
 
   return (
@@ -36,6 +56,7 @@ export const Header: React.FC<HeaderProps> = () => {
                   {languageList.map((l) => (
                     <Menu.Item key={l.code}>{l.name}</Menu.Item>
                   ))}
+                  <Menu.Item key={"new"}>添加新语言</Menu.Item>
                 </Menu>
               }
               icon={<GlobalOutlined />}
