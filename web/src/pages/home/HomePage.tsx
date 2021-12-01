@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { Row, Col, Typography } from "antd";
 import {
@@ -20,6 +21,7 @@ import styles from "./HomePage.module.css";
 interface HomePageProps {}
 
 export const HomePage: React.FC<HomePageProps> = () => {
+  const { t } = useTranslation();
   return (
     <>
       <Header />
@@ -36,7 +38,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
         <ProductCollection
           title={
             <Typography.Title level={3} type="warning">
-              爆款推荐
+              {t("home_page.hot_recommended")}
             </Typography.Title>
           }
           sideImage={sideImage1}
@@ -45,7 +47,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
         <ProductCollection
           title={
             <Typography.Title level={3} type="danger">
-              新品上市
+              {t("home_page.new_arrival")}
             </Typography.Title>
           }
           sideImage={sideImage2}
@@ -54,7 +56,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
         <ProductCollection
           title={
             <Typography.Title level={3} type="success">
-              国内游推荐
+              {t("home_page.domestic_travel")}
             </Typography.Title>
           }
           sideImage={sideImage3}

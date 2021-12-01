@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useTranslation } from "react-i18next";
+
 import { Divider, Typography, Row, Col } from "antd";
 import styles from "./BusinessPartners.module.css";
 
@@ -18,10 +20,13 @@ const companies = [
 interface BusinessPartnersProps {}
 
 export const BusinessPartners: React.FC<BusinessPartnersProps> = () => {
+  const { t } = useTranslation();
   return (
     <div className={styles.content}>
       <Divider orientation={"left"}>
-        <Typography.Title level={3}>合作伙伴</Typography.Title>
+        <Typography.Title level={3}>
+          {t("home_page.joint_venture")}
+        </Typography.Title>
       </Divider>
       <Row>
         {companies.map((c, index) => (

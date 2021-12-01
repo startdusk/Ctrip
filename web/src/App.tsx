@@ -2,6 +2,8 @@ import { HomePage, SignInPage, RegisterPage, DetailPage } from "./pages";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import "./i18n/configs";
+
 import styles from "./App.module.css";
 
 function App() {
