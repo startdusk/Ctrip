@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Layout, Typography, Input, Menu, Button, Dropdown } from "antd";
 import { GlobalOutlined } from "@ant-design/icons";
@@ -7,29 +7,23 @@ import { useTranslation } from "react-i18next";
 
 import logo from "../../assets/logo.svg";
 import styles from "./Header.module.css";
-import store from "../../redux/store";
+import { RootState } from "../../redux/store";
 import {
   changeLanguageActionCreator,
   addLanguageActionCreator,
 } from "../../redux/language/languageActions";
+import { useSelector, useDispatch } from "react-redux";
 
 interface HeaderProps {}
+
+interface State extends RootState {}
 
 export const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { language, languageList } = store.getState();
-  const [, setLanguage] = useState({
-    language,
-    languageList,
-  });
-  store.subscribe(() => {
-    const { language, languageList } = store.getState();
-    setLanguage({
-      language,
-      languageList,
-    });
-  });
+  const dispatch = useDispatch();
+  const language = useSelector((state: State) => state.language);
+  const languageList = useSelector((state: State) => state.languageList);
 
   const manualClick = (e) => {
     if (e.key === "new") {
@@ -38,10 +32,10 @@ export const Header: React.FC<HeaderProps> = () => {
         name: "新语言",
         code: "new_lang",
       });
-      store.dispatch(action);
+      dispatch(action);
     } else {
       const action = changeLanguageActionCreator(e.key);
-      store.dispatch(action);
+      dispatch(action);
     }
   };
 
