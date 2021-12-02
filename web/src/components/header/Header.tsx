@@ -8,6 +8,10 @@ import { useTranslation } from "react-i18next";
 import logo from "../../assets/logo.svg";
 import styles from "./Header.module.css";
 import store from "../../redux/store";
+import {
+  changeLanguageActionCreator,
+  addLanguageActionCreator,
+} from "../../redux/language/languageActions";
 
 interface HeaderProps {}
 
@@ -30,17 +34,14 @@ export const Header: React.FC<HeaderProps> = () => {
   const manualClick = (e) => {
     if (e.key === "new") {
       // 处理新语言添加action
-      const s = {
-        type: "add_language",
-        payload: { code: "new_lang", name: "新语言" },
-      };
-      store.dispatch(s);
+      const action = addLanguageActionCreator({
+        name: "新语言",
+        code: "new_lang",
+      });
+      store.dispatch(action);
     } else {
-      const s = {
-        type: "change_language",
-        payload: e.key,
-      };
-      store.dispatch(s);
+      const action = changeLanguageActionCreator(e.key);
+      store.dispatch(action);
     }
   };
 
