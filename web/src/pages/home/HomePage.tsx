@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Row, Col, Typography, Spin } from "antd";
@@ -11,41 +11,32 @@ import {
   BusinessPartners,
 } from "../../components";
 
-import { productList1, productList2, productList3 } from "./mockups";
 import sideImage1 from "../../assets/images/sider_2019_12-09.png";
 import sideImage2 from "../../assets/images/sider_2019_02-04.png";
 import sideImage3 from "../../assets/images/sider_2019_02-04-2.png";
 
 import styles from "./HomePage.module.css";
-import axios from "axios";
-import camelcaseKeys from "camelcase-keys";
+
+import { useSelector } from "../../redux/hooks";
+import { giveMeDataActionCreator } from "../../redux/recommendProducts/recommendProductsAcrions";
+import { useDispatch } from "react-redux";
 
 interface HomePageProps {}
 
 export const HomePage: React.FC<HomePageProps> = () => {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(true);
-  const [productList, setProductList] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.recommendProducts.loading);
+  const productList = useSelector(
+    (state) => state.recommendProducts.productList as any[]
+  );
+  const error = useSelector((state) => state.recommendProducts.error);
   useEffect(() => {
-    const getProductList = async () => {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/productCollections"
-      );
-      console.log(camelcaseKeys(data, { deep: true }));
-      setProductList(camelcaseKeys(data, { deep: true }));
-      setLoading(false);
-      setError(null);
-    };
-    try {
-      getProductList();
-    } catch (err: any) {
-      setLoading(false);
-      setError(err.message);
-    }
+    dispatch(giveMeDataActionCreator());
+    // eslint-disable-next-line
   }, []);
 
-  if (loading) {
+  if (loading || !productList) {
     return (
       <Spin
         size={"large"}
