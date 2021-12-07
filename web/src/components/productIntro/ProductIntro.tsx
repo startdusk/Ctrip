@@ -80,12 +80,12 @@ export const ProductIntro: React.FC<ProductIntroProps> = ({
       ),
     },
     {
-      key: 2,
+      key: 3,
       title: "领取优惠",
       description: coupons ? discount : "无优惠券可领",
     },
     {
-      key: 2,
+      key: 4,
       title: "线路评价",
       description: (
         <>
@@ -111,7 +111,7 @@ export const ProductIntro: React.FC<ProductIntroProps> = ({
       </div>
       <Carousel autoplay slidesToShow={3}>
         {pictures.map((p) => (
-          <Image height={150} src={p} />
+          <Image key={p} height={150} src={p} />
         ))}
       </Carousel>
       <Table<RowType>

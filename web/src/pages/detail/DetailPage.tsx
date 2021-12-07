@@ -46,6 +46,7 @@ export const DetailPage: React.FC<DetailPageProps> = () => {
       }
     };
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   if (loading || !product) {
