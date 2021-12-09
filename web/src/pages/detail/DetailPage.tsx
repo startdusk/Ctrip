@@ -9,7 +9,7 @@ import {
   Menu,
 } from "antd";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Footer,
@@ -20,6 +20,10 @@ import {
 import camelcaseKeys from "camelcase-keys";
 import { commentMockData } from "./mockup";
 
+import { productDetailSlice } from "../../redux/productDetail/slice";
+import { useSelector } from "../../redux/hooks";
+import { useDispatch } from "react-redux";
+
 import styles from "./DetailPage.module.css";
 
 interface DetailPageProps {}
@@ -28,21 +32,24 @@ const { RangePicker } = DatePicker;
 
 export const DetailPage: React.FC<DetailPageProps> = () => {
   const { touristRouteId } = useParams<"touristRouteId">();
-  const [loading, setLoading] = useState(true);
-  const [product, setProduct] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
+  // const [loading, setLoading] = useState(true);
+  // const [product, setProduct] = useState<any>(null);
+  // const [error, setError] = useState<string | null>(null);
+  const loading = useSelector((state) => state.productDetail.loading);
+  const product = useSelector((state) => state.productDetail.data);
+  const error = useSelector((state) => state.productDetail.error);
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      dispatch(productDetailSlice.actions.fetchStart());
       try {
         const { data } = await axios.get(
           `http://localhost:5000/api/touristRoutes/${touristRouteId}`
         );
-        setProduct(camelcaseKeys(data, { deep: true }));
-        setLoading(false);
+        const product = camelcaseKeys(data, { deep: true });
+        dispatch(productDetailSlice.actions.fetchSuccess(product));
       } catch (err: any) {
-        setLoading(false);
-        setError(err.message);
+        dispatch(productDetailSlice.actions.fetchFail(err.message));
       }
     };
     fetchData();
