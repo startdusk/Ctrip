@@ -8,7 +8,6 @@ import {
   Anchor,
   Menu,
 } from "antd";
-import axios from "axios";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -17,10 +16,9 @@ import {
   ProductIntro,
   ProductComments,
 } from "../../components";
-import camelcaseKeys from "camelcase-keys";
 import { commentMockData } from "./mockup";
 
-import { productDetailSlice } from "../../redux/productDetail/slice";
+import { getProductDetail } from "../../redux/productDetail/slice";
 import { useSelector } from "../../redux/hooks";
 import { useDispatch } from "react-redux";
 
@@ -32,27 +30,12 @@ const { RangePicker } = DatePicker;
 
 export const DetailPage: React.FC<DetailPageProps> = () => {
   const { touristRouteId } = useParams<"touristRouteId">();
-  // const [loading, setLoading] = useState(true);
-  // const [product, setProduct] = useState<any>(null);
-  // const [error, setError] = useState<string | null>(null);
   const loading = useSelector((state) => state.productDetail.loading);
   const product = useSelector((state) => state.productDetail.data);
   const error = useSelector((state) => state.productDetail.error);
   const dispatch = useDispatch();
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch(productDetailSlice.actions.fetchStart());
-      try {
-        const { data } = await axios.get(
-          `http://localhost:5000/api/touristRoutes/${touristRouteId}`
-        );
-        const product = camelcaseKeys(data, { deep: true });
-        dispatch(productDetailSlice.actions.fetchSuccess(product));
-      } catch (err: any) {
-        dispatch(productDetailSlice.actions.fetchFail(err.message));
-      }
-    };
-    fetchData();
+    dispatch(getProductDetail(touristRouteId!));
     // eslint-disable-next-line
   }, []);
 

@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
+import camelcaseKeys from "camelcase-keys";
 
 export interface ProductDetailState {
   loading: boolean;
@@ -12,19 +14,33 @@ const initialState: ProductDetailState = {
   data: null,
 };
 
+export const getProductDetail = createAsyncThunk(
+  "productDetail/getProductDetail",
+  async (touristRouteId: string, thunkAPI) => {
+    const { data } = await axios.get(
+      `http://localhost:5000/api/touristRoutes/${touristRouteId}`
+    );
+    return camelcaseKeys(data, { deep: true });
+  }
+);
+
 export const productDetailSlice = createSlice({
   name: "productDetail",
   initialState,
-  reducers: {
-    fetchStart: (state) => {
+  reducers: {},
+  extraReducers: {
+    [getProductDetail.pending.type]: (state) => {
       state.loading = true;
     },
-    fetchSuccess: (state, action) => {
+    [getProductDetail.fulfilled.type]: (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.error = null;
     },
-    fetchFail: (state, action: PayloadAction<string | null>) => {
+    [getProductDetail.rejected.type]: (
+      state,
+      action: PayloadAction<string | null>
+    ) => {
       state.loading = false;
       state.error = action.payload;
     },
