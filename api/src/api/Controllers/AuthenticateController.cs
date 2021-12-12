@@ -106,6 +106,7 @@ namespace Ctrip.API.Controllers
             };
 
             // 2 hash密码，保存用户
+            // 2021/12/12 测试发现 注册用户时，需要有大小写字母和特殊字符，否则注册CreateAsync是不通过的
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded)
             {

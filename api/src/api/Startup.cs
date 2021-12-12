@@ -42,7 +42,9 @@ namespace Ctrip.API
                 // 指定跨域请求域名
                 setupAction.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000");
+                    builder
+                        .WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader();
                 });
             });
             services.AddControllers(setupAction =>

@@ -6,7 +6,14 @@ import { CaretDownOutlined } from "@ant-design/icons";
 import { Layout, Menu, Dropdown, Button } from "antd";
 const { Header, Footer, Content } = Layout;
 
-export const UserLayout: React.FC = ({ children }) => {
+interface UserLayoutProps {
+  pageTitle?: string;
+}
+
+export const UserLayout: React.FC<UserLayoutProps> = ({
+  pageTitle,
+  children,
+}) => {
   const menu = (
     <Menu>
       <Menu.Item>中文</Menu.Item>
@@ -34,7 +41,7 @@ export const UserLayout: React.FC = ({ children }) => {
               <span className={styles["title"]}>Ctrip 旅游网</span>
             </Link>
           </div>
-          <div className={styles["desc"]}>Ctrip 旅游网</div>
+          <div className={styles["desc"]}>{pageTitle}</div>
           {children}
         </div>
       </Content>
