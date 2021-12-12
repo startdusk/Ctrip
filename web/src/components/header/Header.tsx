@@ -61,10 +61,10 @@ export const Header: React.FC<HeaderProps> = () => {
               {language === "zh" ? "中文" : "English"}
             </Dropdown.Button>
             <Button.Group className={styles["button-group"]}>
-              <Button onClick={() => navigate("register")}>
+              <Button onClick={() => navigate("/register")}>
                 {t("header.register")}
               </Button>
-              <Button onClick={() => navigate("signin")}>
+              <Button onClick={() => navigate("/signin")}>
                 {t("header.signin")}
               </Button>
             </Button.Group>
@@ -80,6 +80,7 @@ export const Header: React.FC<HeaderProps> = () => {
           <Input.Search
             placeholder={"请输入旅游目的地、主题、或关键字"}
             className={styles["search-input"]}
+            onSearch={(keywords) => navigate(`/search/${keywords}`)}
           />
         </Layout.Header>
         <Menu mode={"horizontal"} className={styles["main-menu"]}>
