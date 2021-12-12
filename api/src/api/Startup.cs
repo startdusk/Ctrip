@@ -36,6 +36,15 @@ namespace Ctrip.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(setupAction =>
+            {
+                // 指定跨域请求域名
+                setupAction.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000");
+                });
+            });
             services.AddControllers(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true;
@@ -138,6 +147,8 @@ namespace Ctrip.API
             app.UseAuthentication();
             // 你可以干啥(有啥权限)
             app.UseAuthorization();
+
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

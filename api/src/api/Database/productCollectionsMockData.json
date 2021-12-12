@@ -1,0 +1,295 @@
+[
+  {
+    "id": 1,
+    "title": "爆款推荐",
+    "description": "爆款推荐旅游路线",
+    "touristRoutes": [
+      {
+        "id": "4bdc907a-0765-4027-a243-1c41e608fede",
+        "title": "埃及阿斯旺+卢克索+红海Red Sea+开罗+亚历山大12日跟团游(5钻)·【官方旗舰明星纯玩团】25人封顶|含签证小费全程餐|3晚尼罗河游轮+3晚红海全包度假村+1晚底比斯古都|升级内陆飞机|优质中文导游队伍|七大神庙+赠项目",
+        "price": "11990",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "137e2501-d3a8-4415-b8b6-92f80e4bcec6",
+        "title": "摩洛哥撒哈拉沙漠+卡萨布兰卡+马拉喀什+舍夫沙...",
+        "price": "13290",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "6dbfc243-7c60-4639-b442-743b1cd3dbfd",
+        "title": "越南胡志明市+美奈+芽庄+河内7日6晚跟团游(4钻)...",
+        "price": "4000",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "2335971c-db01-4f05-b61c-a770d042c08c",
+        "title": "迪拜+阿布扎比6日跟团游(5钻)·【携程国旅纯玩...",
+        "price": "7399",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ab86af20-44c4-4cc3-a0d9-b0cd54679e66",
+        "title": "泰国曼谷+芭堤雅6日5晚跟团游(5钻)·【纯玩】『可...",
+        "price": "3499",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "4bcb4c75-5150-4a25-a293-58964fe9b297",
+        "title": "日本大阪+京都+箱根+东京6日5晚跟团游(4钻)·【浪...",
+        "price": "5999",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "15b7f89e-653c-4c13-93ed-c35c10b27db5",
+        "title": "新加坡+马来西亚6日5晚跟团游(5钻)·【纯玩无购物...",
+        "price": "6199",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "c6800946-c237-4e75-8e41-69e032af3d85",
+        "title": "法国+德国+意大利+瑞士12日跟团游(4钻)·【匠心定...",
+        "price": "13699",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "bbd99004-b05d-4b72-b3a2-ea76d0c9a6d5",
+        "title": "印度尼西亚巴厘岛7日5晚私家团(5钻)·A线独栋泳...",
+        "price": "5021",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": 2,
+    "title": "新品上市",
+    "description": "新品上市旅游路线",
+    "touristRoutes": [
+      {
+        "id": "515c9e61-57ee-4cf4-b099-ecfea6a2516d",
+        "title": "南京3日2晚跟团游(4钻)·观中山陵+游总统府+览博物院『游六朝古都 听漫长历史』&逛秦淮河风光带+老门东『品美食 唤醒您的舌尖』&牛首山+报恩寺『诚心祈福 放空心灵』& 2晚连住4钻酒店",
+        "price": "11990",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "f8d92470-6f1d-41e9-b58c-7f76126d21c0",
+        "title": "摩洛哥撒哈拉沙漠+卡萨布兰卡+马拉喀什+舍夫沙...",
+        "price": "13290",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "65cae9db-4a03-469a-a3bf-88b8a13da00a",
+        "title": "越南胡志明市+美奈+芽庄+河内7日6晚跟团游(4钻)...",
+        "price": "4000",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "55ad6d5c-8b2b-430e-b9ba-1e90a915b840",
+        "title": "迪拜+阿布扎比6日跟团游(5钻)·【携程国旅纯玩...",
+        "price": "7399",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "fb2cd19e-a65f-4298-b5b6-afce84286de9",
+        "title": "泰国曼谷+芭堤雅6日5晚跟团游(5钻)·【纯玩】『可...",
+        "price": "3499",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "423a5820-ff3d-41d0-ac2d-a39ac3bf0be8",
+        "title": "日本大阪+京都+箱根+东京6日5晚跟团游(4钻)·【浪...",
+        "price": "5999",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "6df2172c-8c0e-486f-8d05-1d2fd3ccaa74",
+        "title": "新加坡+马来西亚6日5晚跟团游(5钻)·【纯玩无购物...",
+        "price": "6199",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "9782b0a0-0b5d-4bd6-8d3f-76809f6dd198",
+        "title": "法国+德国+意大利+瑞士12日跟团游(4钻)·【匠心定...",
+        "price": "13699",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "dd9c732b-eaa1-479a-85df-c2652c8a9e4d",
+        "title": "印度尼西亚巴厘岛7日5晚私家团(5钻)·A线独栋泳...",
+        "price": "5021",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": 3,
+    "title": "国内旅游推荐",
+    "description": "国内著名旅游路线",
+    "touristRoutes": [
+      {
+        "id": "ef016d58-02de-4d0b-b394-d3a6f93f9845",
+        "title": "埃及阿斯旺+卢克索+红海Red Sea+开罗+亚历山大12日跟团游(5钻)·【官方旗舰明星纯玩团】25人封顶|含签证小费全程餐|3晚尼罗...",
+        "price": "11990",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "55887e28-9b6b-407c-bf2b-e709c01312de",
+        "title": "摩洛哥撒哈拉沙漠+卡萨布兰卡+马拉喀什+舍夫沙...",
+        "price": "13290",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "84365170-063e-42a1-a375-385efb39f62a",
+        "title": "越南胡志明市+美奈+芽庄+河内7日6晚跟团游(4钻)...",
+        "price": "4000",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "6bb0872f-736b-47b1-8a37-154fdf0ee744",
+        "title": "迪拜+阿布扎比6日跟团游(5钻)·【携程国旅纯玩...",
+        "price": "7399",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "0f0abf10-08da-46a8-aa53-c74dcbdbec8f",
+        "title": "泰国曼谷+芭堤雅6日5晚跟团游(5钻)·【纯玩】『可...",
+        "price": "3499",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "8c7c3636-3b15-4cca-888b-629932e27631",
+        "title": "日本大阪+京都+箱根+东京6日5晚跟团游(4钻)·【浪...",
+        "price": "5999",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "18f63969-ffc5-4800-8713-04ba65cebbb6",
+        "title": "新加坡+马来西亚6日5晚跟团游(5钻)·【纯玩无购物...",
+        "price": "6199",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "1cbc5602-55ef-48e9-874c-00a7be666a23",
+        "title": "法国+德国+意大利+瑞士12日跟团游(4钻)·【匠心定...",
+        "price": "13699",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      },
+      {
+        "id": "06fe062e-fd4c-446f-b124-a8430c1c5ffe",
+        "title": "印度尼西亚巴厘岛7日5晚私家团(5钻)·A线独栋泳...",
+        "price": "5021",
+        "touristRoutePictures": [
+          {
+            "url": "https://s3.ax1x.com/2020/12/15/rMQOIJ.jpg"
+          }
+        ]
+      }
+    ]
+  }
+]

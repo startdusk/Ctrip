@@ -96,7 +96,10 @@ namespace Ctrip.API.Controllers
                 currentPage = touristRoutesFromRepo.CurrentPage,
                 totalPage = touristRoutesFromRepo.TotalPages
             };
+            // 添加自定义响应头
             Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
+            // 让浏览器能访问到其他的 响应头的话 需要在服务器上设置 Access-Control-Expose-Headers
+            Response.Headers.Add("Access-Control-Expose-Headers", "X-Pagination");
             var shapedDtoList = touristRoutesDto.ShapeData(paramaters.Fields);
 
             var mediaTypeList = parsedMediaTypeList.Where(m => m.MediaType == "application/vnd.ctrip.hateoas+json");
