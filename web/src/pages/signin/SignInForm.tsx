@@ -1,23 +1,34 @@
 import { Form, Input, Button, Checkbox } from "antd";
-import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { useSelector } from "../../redux/hooks";
+import { signIn } from "../../redux/user/slice";
 
 import styles from "./SignInForm.module.css";
 
 export const SignInForm: React.FC = () => {
+  const loading = useSelector((state) => state.user.loading);
+  // const error = useSelector((state) => state.user.error);
+  const jwt = useSelector((state) => state.user.token);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (jwt) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [jwt]);
+
   const navigate = useNavigate();
   const onFinish = async (values: any) => {
-    console.log("Success:", values);
-    try {
-      await axios.post("http://localhost:5000/auth/login", {
+    dispatch(
+      signIn({
         email: values.username,
         password: values.password,
-      });
-      navigate("/");
-    } catch (err: any) {
-      alert("signin error: " + err);
-      console.error(err);
-    }
+      })
+    );
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -84,7 +95,7 @@ export const SignInForm: React.FC = () => {
           span: 16,
         }}
       >
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={loading}>
           Submit
         </Button>
       </Form.Item>

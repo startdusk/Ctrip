@@ -40,7 +40,7 @@ namespace Ctrip.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> login([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             // 1 验证用户名密码
             var loginResult = await _signInManager.PasswordSignInAsync(
@@ -91,7 +91,8 @@ namespace Ctrip.API.Controllers
             var tokenStr = new JwtSecurityTokenHandler().WriteToken(token);
 
             // 3 return 200 ok + jwt
-            return Ok(tokenStr);
+
+            return Ok(new TokenDto() { Token = tokenStr });
         }
 
         [AllowAnonymous]
