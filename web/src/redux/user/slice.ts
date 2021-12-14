@@ -33,7 +33,13 @@ export const signIn = createAsyncThunk(
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.error = null;
+      state.loading = false;
+      state.token = null;
+    },
+  },
   extraReducers: {
     [signIn.pending.type]: (state) => {
       state.loading = true;
