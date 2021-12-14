@@ -8,6 +8,15 @@ import { productDetailSlice } from "./productDetail/slice";
 import { productSearchSlice } from "./productSearch/slice";
 import { userSlice } from "./user/slice";
 
+import { persistStore, persistReducer as PersistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["user"],
+};
+
 const rootReducer = combineReducers({
   language: languageReducer,
   recommendProducts: recommendProductsReducer,
@@ -16,12 +25,17 @@ const rootReducer = combineReducers({
   user: userSlice.reducer,
 });
 
+const persistReducer = PersistReducer(persistConfig, rootReducer);
+
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistReducer,
   middleware: (getDefaultMiddleware) => [...getDefaultMiddleware(), actionLog],
   devTools: true,
 });
 
+const persistor = persistStore(store);
+
 export type RootState = ReturnType<typeof store.getState>;
 
-export default store;
+const rootStore = { store, persistor };
+export default rootStore;

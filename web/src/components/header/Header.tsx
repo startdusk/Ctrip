@@ -35,8 +35,6 @@ export const Header: React.FC<HeaderProps> = () => {
   const onLogout = () => {
     dispatch(userSlice.actions.logout());
     navigate("/");
-
-    window.location.reload(); // 可加可不加
   };
   useEffect(() => {
     if (jwt) {
