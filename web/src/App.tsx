@@ -4,13 +4,34 @@ import {
   RegisterPage,
   DetailPage,
   SearchPage,
+  ShoppingCartPage,
 } from "./pages";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import { useSelector } from "./redux/hooks";
 
 import styles from "./App.module.css";
+import React from "react";
+
+const PrivateRoute = ({ compoent, isAuthenticated, ...rest }) => {
+  const routeComponent = (props) => {
+    return isAuthenticated ? (
+      React.createElement(compoent, props)
+    ) : (
+      <Route path="shoppingCart" element={<Navigate to="/signin" />} />
+    );
+  };
+
+  return <Route />;
+};
 
 function App() {
+  const jwt = useSelector((state) => state.user.token);
+  const RequireAuth = ({ children, redirectTo }) => {
+    let isAuthenticated = jwt !== null;
+    return isAuthenticated ? children : <Navigate to={redirectTo} />;
+  };
   return (
     <div className={styles.App}>
       <BrowserRouter>
@@ -21,6 +42,15 @@ function App() {
           <Route path="/detail/:touristRouteId" element={<DetailPage />} />
           {/* ? 代表参数是可选的 */}
           <Route path="/search/:keywords" element={<SearchPage />} />
+          <Route
+            path="/shoppingCart"
+            element={
+              <RequireAuth redirectTo="/signin">
+                <ShoppingCartPage />
+              </RequireAuth>
+            }
+          />
+          {/* TODO: page not found */}
           <Route path="*" />
         </Routes>
       </BrowserRouter>
