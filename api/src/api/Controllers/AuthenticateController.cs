@@ -62,9 +62,11 @@ namespace Ctrip.API.Controllers
             // payload
             var claims = new List<Claim>
             {
+                // 添加用户自定义信息到jwt
                 // sub
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                //new Claim(ClaimTypes.Role, "Admin")
+                // username
+                new Claim("username", user.Email)
             };
             var roleNames = await _userManager.GetRolesAsync(user);
             foreach (var roleName in roleNames)
