@@ -12,19 +12,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "./redux/hooks";
 
 import styles from "./App.module.css";
-import React from "react";
-
-const PrivateRoute = ({ compoent, isAuthenticated, ...rest }) => {
-  const routeComponent = (props) => {
-    return isAuthenticated ? (
-      React.createElement(compoent, props)
-    ) : (
-      <Route path="shoppingCart" element={<Navigate to="/signin" />} />
-    );
-  };
-
-  return <Route />;
-};
 
 function App() {
   const jwt = useSelector((state) => state.user.token);
