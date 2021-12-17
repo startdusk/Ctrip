@@ -22,7 +22,8 @@ export const getShoppingCart = createAsyncThunk(
         Authorization: `Bearer ${jwt}`,
       },
     });
-    return camelcaseKeys(data, { deep: true });
+    const items = camelcaseKeys(data, { deep: true });
+    return items.shoppingCartItems;
   }
 );
 
@@ -40,7 +41,8 @@ export const addShoppingCart = createAsyncThunk(
         },
       }
     );
-    return camelcaseKeys(data.shoppingCartItems, { deep: true });
+    const items = camelcaseKeys(data, { deep: true });
+    return items.shoppingCartItems;
   }
 );
 

@@ -7,7 +7,9 @@ import {
   Typography,
   Anchor,
   Menu,
+  Button,
 } from "antd";
+import { ShopOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ProductIntro, ProductComments } from "../../components";
@@ -16,6 +18,7 @@ import { commentMockData } from "./mockup";
 import { getProductDetail } from "../../redux/productDetail/slice";
 import { useSelector } from "../../redux/hooks";
 import { useDispatch } from "react-redux";
+import { addShoppingCart } from "../../redux/shoppingCart/slice";
 
 import { MainLayout } from "../../layouts";
 
@@ -31,8 +34,13 @@ export const DetailPage: React.FC<DetailPageProps> = () => {
   const product = useSelector((state) => state.productDetail.data);
   const error = useSelector((state) => state.productDetail.error);
   const dispatch = useDispatch();
+
+  const jwt = useSelector((state) => state.user.token) as string;
+  const shoppingCartLoading = useSelector(
+    (state) => state.shoppingCart.loading
+  );
   useEffect(() => {
-    dispatch(getProductDetail(touristRouteId!));
+    dispatch(getProductDetail(touristRouteId as string));
     // eslint-disable-next-line
   }, []);
 
@@ -73,6 +81,18 @@ export const DetailPage: React.FC<DetailPageProps> = () => {
             />
           </Col>
           <Col span={11}>
+            <Button
+              style={{ marginTop: 50, marginBottom: 30, display: "block" }}
+              type="primary"
+              danger
+              loading={shoppingCartLoading}
+              onClick={() => {
+                dispatch(addShoppingCart({ jwt, touristRouteId: product.id }));
+              }}
+            >
+              <ShopOutlined />
+              放入购物车
+            </Button>
             <RangePicker open style={{ marginTop: 20 }} />
           </Col>
         </Row>

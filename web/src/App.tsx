@@ -12,6 +12,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "./redux/hooks";
 
 import styles from "./App.module.css";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getShoppingCart } from "./redux/shoppingCart/slice";
 
 function App() {
   const jwt = useSelector((state) => state.user.token);
@@ -19,6 +22,13 @@ function App() {
     let isAuthenticated = jwt !== null;
     return isAuthenticated ? children : <Navigate to={redirectTo} />;
   };
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getShoppingCart(jwt));
+    }
+    // eslint-disable-next-line
+  }, [jwt]);
   return (
     <div className={styles.App}>
       <BrowserRouter>
