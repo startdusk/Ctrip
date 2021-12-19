@@ -5,6 +5,7 @@ import {
   DetailPage,
   SearchPage,
   ShoppingCartPage,
+  PlaceOrderPage,
 } from "./pages";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -47,8 +48,16 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route
+            path="/placeOrder"
+            element={
+              <RequireAuth redirectTo="/signin">
+                <PlaceOrderPage />
+              </RequireAuth>
+            }
+          />
           {/* TODO: page not found */}
-          <Route path="*" />
+          <Route path="*" element={<h1>404 not found 页面去火星了</h1>} />
         </Routes>
       </BrowserRouter>
     </div>
